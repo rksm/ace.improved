@@ -9,16 +9,18 @@
   </head>
   <body>
     <div id="mocha"></div>
-    <script type="text/javascript" src="helper.js"></script>
     <script type="text/javascript" src="mocha-bundle.js"></script>
+    <script type="text/javascript" src="helper.js"></script>
 
-    <!-- <script type="text/javascript" src="../node_modules/acorn/acorn.js"></script> -->
+    <script type="text/javascript" src="../vendor/ace/ace.js"></script> 
 
     <script type="text/javascript">
       mocha.setup("bdd");
       var urls = [
         "../lib/ace.improvements.js",
-        "ace.improvements-test.js"
+        "../lib/ace.ext.custom-text-attributes.js",
+        "ace.improvements-test.js",
+        "custom-tokenized-test.js"
       ];
       loadUncached(urls, function() {
         mocha.checkLeaks();
