@@ -20,7 +20,8 @@
   </head>
   <body>
     <pre id="editor">xxx</pre>
-    <script src="../vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <!--<script src="../vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>-->
+    <script src="http://cdn.jsdelivr.net/ace/1.1.8/noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="../lib/ace.ext.custom-text-attributes.js" type="text/javascript" charset="utf-8"></script>
     <script src="../lib/ace.improvements.js" type="text/javascript" charset="utf-8"></script>
     <script>
@@ -28,9 +29,9 @@
       ed.session.setMode("ace/mode/attributedtext")
       var m = ed.session.getMode()
       var spec = [
-        ["Hello", {type: "string", commands: [{name: 'oink', bindKey: 'enter', exec: function() { console.log("oink!"); }}]}],
-        ["\nWorld", {type: "text"}],
-        ["\naction", {type: "markup.underline", onClick: 'oink'}]
+        ["Press enter here", {type: "string", commands: [{name: 'oink', bindKey: 'enter', exec: function() { console.log("oink!"); }}]}],
+        ["\nNothing happens here...", {type: "text"}],
+        ["\nclick here!", {type: "markup.underline", onClick: 'oink'}]
       ];
       m.set(ed, spec)
       
