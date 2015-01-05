@@ -1,3 +1,3 @@
 # ace.improved
 
-a better ace editor
+For a better [ace editor](http://ace.c9.io/)!
