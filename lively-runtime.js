@@ -4,7 +4,7 @@ lively.require("lively.lang.Runtime").toRun(function() {
   // var project = r.Registry.default().projects["ace.improved"];
   // project.reloadAll(project, function(err) { err ? show(err.stack || String(err)) : alertOK("reloaded!"); })
   r.Registry.addProject(r.Registry.default(), {
-    name: "paredit-ace",
+    name: "ace.improved",
     rootDir: "/Users/robert/Lively/ace.improved",
 
     reloadAll: function(project, thenDo) {
