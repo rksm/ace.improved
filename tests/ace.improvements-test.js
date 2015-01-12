@@ -49,10 +49,9 @@ describe('improvements', function() {
         expect(ed).to.have.selection("[0/4]->[0/4]");
         reset();
         expect(ed).to.have.selection("[0/2]->[0/4]");
-        done()
+        done();
       });
     });
-  })
-
+  });
 
 });
