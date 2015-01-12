@@ -25,15 +25,16 @@
         alert("Ace Rocks " + items[i]);
     }
 }      </pre>
-    <script src="../vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../lib/ace.ext.custom-text-attributes.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/ace/1.1.8/noconflict/ace.js"></script> 
     <script src="../lib/ace.improvements.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/ace.ext.custom-text-attributes.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../lib/ace.ext.keys.js" type="text/javascript" charset="utf-8"></script>
     <script>
       var ed = ace.edit("editor");
-      ed.session.setMode("ace/mode/attributedtext")
-      var m = ed.session.getMode()
-      m.set(ed, [["Hello", "string"]])
-      
+      // ed.session.setMode("ace/mode/attributedtext")
+      // var m = ed.session.getMode()
+      // m.set(ed, [["Hello", "string"]])
+      ace.ext.keys.addKeyCustomizationLayer("test", {"golinedown": "Alt-t t"});
     </script>
   </body>
 </html>

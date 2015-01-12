@@ -18,8 +18,10 @@
       mocha.setup("bdd");
       var urls = [
         "../lib/ace.improvements.js",
+        "../lib/ace.ext.keys.js",
         "../lib/ace.ext.custom-text-attributes.js",
         "ace.improvements-test.js",
+        "ace.ext.keys-test.js",
         "custom-tokenized-test.js"
       ];
       loadUncached(urls, function() {

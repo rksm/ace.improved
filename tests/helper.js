@@ -13,6 +13,26 @@ chai.Assertion.prototype.selection = function(str) {
   new chai.Assertion(actual).to.be.equal(expected);
 }
 
+chai.Assertion.prototype.rangeAndContent = function(rangeStartRow, rangeStartCol, rangeEndRow, rangeEndCol, content) {
+  var ed = this._obj;
+  var r = ed.session.selection.getRange();
+  new chai.Assertion(ed.getValue()).equal(content,
+    'content expected to be ' + content +
+    ' but is ' + ed.getValue());
+  new chai.Assertion(r.start.column).equal(rangeStartCol,
+    'range start column expected to be ' + rangeStartCol +
+    ' but is ' + r.start.column);
+  new chai.Assertion(r.start.row).equal(rangeStartRow,
+    'range start row expected to be ' + rangeStartRow +
+    ' but is ' + r.start.row);
+  new chai.Assertion(r.end.column).equal(rangeEndCol,
+    'range end column expected to be ' + rangeEndCol +
+    ' but is ' + r.end.column);
+  new chai.Assertion(r.end.row).equal(rangeEndRow,
+    'range end row expected to be ' + rangeEndRow +
+    ' but is ' + r.end.row);
+}
+
 function createEditorEl() {
   var div = document.createElement("div");
   div.setAttribute("id", "editor");
