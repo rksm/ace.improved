@@ -85,19 +85,31 @@ describe('ace.ext.keys', function() {
   
   describe("key customization", function() {
 
-    it("can defien new keybindings for exisiting commands", function() {
+    it("can define new keybindings for exisiting commands", function() {
       var run = false;
       var cmd = {name: "test-command", exec: function() { run = true; }};
       ed.commands.addCommands([cmd]);
-      ace.ext.keys.addKeyCustomizationLayer("test-layer", {commandKeyBinding: {"test-command": "alt-t"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer",
+        {commandKeyBinding: {"alt-t": "test-command"}})
       expect(cmd).to.equal(ace.ext.keys.lookupKeys(ed, "Alt-t"));
       expect(ed.keyBinding.$handlers.length).to.equal(1);
+    });
+
+    it("can bind keys with objectified command", function() {
+      var result;
+      var cmd = {name: "test-command", exec: function(_d, args) { result = args.value; }};
+      ed.commands.addCommands([cmd]);
+      ace.ext.keys.addKeyCustomizationLayer("test-layer",
+        {commandKeyBinding: {"alt-t": {name: "test-command", args: {value: 23}}}})
+      ace.ext.keys.simulateKey(ed, "Alt-t");
+      expect(result).to.equal(23);
     });
 
     it("can remove customizations", function() {
       var cmd = {name: "test-command", exec: function() {}};
       ed.commands.addCommands([cmd]);
-      ace.ext.keys.addKeyCustomizationLayer("test-layer", {commandKeyBinding: {"test-command": "alt-t"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer",
+        {commandKeyBinding: {"alt-t": "test-command"}})
       ace.ext.keys.removeKeyCustomizationLayer("test-layer")
       expect(undefined).to.equal(ace.ext.keys.lookupKeys(ed, "Alt-t"));
     });
@@ -108,9 +120,9 @@ describe('ace.ext.keys', function() {
       var cmd2 = {name: "test-command-2", exec: function() { run = 2; }};
       var cmd3 = {name: "test-command-3", exec: function() { run = 3; }};
       ed.commands.addCommands([cmd1, cmd2, cmd3]);
-      ace.ext.keys.addKeyCustomizationLayer("test-layer-1", {priority: 10, commandKeyBinding: {"test-command-1": "alt-t"}})
-      ace.ext.keys.addKeyCustomizationLayer("test-layer-2", {priority: 12, commandKeyBinding: {"test-command-2": "alt-t"}})
-      ace.ext.keys.addKeyCustomizationLayer("test-layer-3", {priority: 2, commandKeyBinding: {"test-command-3": "alt-t"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer-1", {priority: 10, commandKeyBinding: {"alt-t": "test-command-1"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer-2", {priority: 12, commandKeyBinding: {"alt-t": "test-command-2"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer-3", {priority: 2, commandKeyBinding: {"alt-t": "test-command-3"}})
       ace.ext.keys.simulateKey(ed, "Alt-t");
       expect(run).equals(2);
     });
@@ -121,9 +133,9 @@ describe('ace.ext.keys', function() {
       var cmd2 = {name: "test-command-2", exec: function() { run = 2; }};
       var cmd3 = {name: "test-command-3", exec: function() { run = 3; }};
       ed.commands.addCommands([cmd1, cmd2, cmd3]);
-      ace.ext.keys.addKeyCustomizationLayer("test-layer-1", {priority: 10, commandKeyBinding: {"test-command-1": "alt-t"}})
-      ace.ext.keys.addKeyCustomizationLayer("test-layer-2", {priority: 12, commandKeyBinding: {"test-command-2": "alt-t"}})
-      ace.ext.keys.addKeyCustomizationLayer("test-layer-3", {priority: 2, commandKeyBinding: {"test-command-3": "alt-t"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer-1", {priority: 10, commandKeyBinding: {"alt-t": "test-command-1"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer-2", {priority: 12, commandKeyBinding: {"alt-t": "test-command-2"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer-3", {priority: 2, commandKeyBinding: {"alt-t": "test-command-3"}})
       ace.ext.keys.simulateKey(ed, "Alt-t");
       expect(run).equals(2);
     });
@@ -132,7 +144,7 @@ describe('ace.ext.keys', function() {
       var run;
       var cmd = {name: "test-command", exec: function() { run = 1; }};
       ed.commands.addCommands([cmd]);
-      ace.ext.keys.addKeyCustomizationLayer("test-layer", {priority: 10, modes: ["ace/mode/javascript"], commandKeyBinding: {"test-command": "alt-t"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer", {priority: 10, modes: ["ace/mode/javascript"], commandKeyBinding: {"alt-t": "test-command"}})
       ace.ext.keys.simulateKey(ed, "Alt-t");
       expect(run).equals(undefined);
       ed.setOption("mode", "ace/mode/javascript")
