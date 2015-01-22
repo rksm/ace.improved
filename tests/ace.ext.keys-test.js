@@ -16,19 +16,23 @@ describe('ace.ext.keys', function() {
 
   describe("find command for key", function() {
 
-    it("finds commands bound in key handler", function() {
+    it("finds commands bound in key handler", function(done) {
       var run = false;
       var cmd = {name: "test-command", bindKey: "Alt-t", exec: function() { run = true; }};
       var keyHandler = new (ace.require("ace/keyboard/hash_handler")).HashHandler([cmd]);
       ed.setKeyboardHandler(keyHandler);
-      expect(cmd).to.equal(ace.ext.keys.lookupKeys(ed, "Alt-t"));
-      expect(run).to.equal(false);
+      ace.ext.keys.lookupKeys(ed, "Alt-t", function(result) {
+        expect(cmd).to.equal(result);
+        expect(run).to.equal(false);
+        done();
+      })
     });
 
     it("finds commands bound in commands", function() {
       var cmd = {name: "test-command", bindKey: "Alt-t", exec: function() {}};
       ed.commands.addCommands([cmd])
-      expect(cmd).to.equal(ace.ext.keys.lookupKeys(ed, "Alt-t"));
+      ace.ext.keys.lookupKeys(ed, "Alt-t", function(result) {
+        expect(cmd).to.equal(result); });
     });
 
   });
@@ -91,7 +95,9 @@ describe('ace.ext.keys', function() {
       ed.commands.addCommands([cmd]);
       ace.ext.keys.addKeyCustomizationLayer("test-layer",
         {commandKeyBinding: {"alt-t": "test-command"}})
-      expect(cmd).to.equal(ace.ext.keys.lookupKeys(ed, "Alt-t"));
+      var found;
+      ace.ext.keys.lookupKeys(ed, "Alt-t", function(x) { found = x; })
+      expect(cmd).to.equal(found);
       expect(ed.keyBinding.$handlers.length).to.equal(1);
     });
 
@@ -111,7 +117,10 @@ describe('ace.ext.keys', function() {
       ace.ext.keys.addKeyCustomizationLayer("test-layer",
         {commandKeyBinding: {"alt-t": "test-command"}})
       ace.ext.keys.removeKeyCustomizationLayer("test-layer")
-      expect(undefined).to.equal(ace.ext.keys.lookupKeys(ed, "Alt-t"));
+      var found;
+      var reset = ace.ext.keys.lookupKeys(ed, "Alt-t", function(x) { found = x; })
+      expect(undefined).to.equal(found);
+      reset();
     });
 
     it("can define multiple customizations with priority ", function() {
