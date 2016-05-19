@@ -1,31 +1,19 @@
 {
   "name": "ace.improved",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "For a better ace editor",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "node_modules/mocha/bin/mocha tests/*-test.js && node_modules/mocha-phantomjs/bin/mocha-phantomjs tests/run-tests.html"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/rksm/ace.improved"
   },
   "keywords": [
     "ace",
-    "programming"
+    "programming",
+    "code editor"
   ],
   "author": "Robert Krahn",
   "license": "MIT",
   "homepage": "https://github.com/rksm/ace.improved",
-  "dependencies": {
-  },
-  "devDependencies": {
-    "chai": "^1.10.0",
-    "chai-subset": "^0.3.0",
-    "mocha": "^2.0.1",
-    "mocha-phantomjs": "^3.5.1"
-  }
+  "dependencies": {}
 }
