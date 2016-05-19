@@ -1,4 +1,4 @@
-/*global process, expect, beforeEach, afterEach, describe, it*/
+/*global ace, createEditor, expect, before, beforeEach, afterEach, describe, it*/
 
 describe('improvements', function() {
 
@@ -41,6 +41,12 @@ describe('improvements', function() {
       expect(ed.selection.isBackwards()).eq(true);
     });
 
+    it("does multiple selections", function() {
+      ed.addSelection(0, 4);
+      ed.addSelection("[1/0]->[1/4]");
+      expect(ed.getSelectedText()).eq("this\ntest\n");
+    });
+
     it('saveExcursion', function(done) {
       expect(ed).to.exist();
       ed.setSelection("[0/2]->[0/4]");
@@ -50,6 +56,19 @@ describe('improvements', function() {
         reset();
         expect(ed).to.have.selection("[0/2]->[0/4]");
         done();
+      });
+    });
+
+    it('saveExcursion resets to multi selection', function(done) {
+      ed.setSelection(0, 1); ed.addSelection(2,3); ed.addSelection(5,6);
+      expect(ed.getSelectedText()).eq("t\ni\ni");
+      ed.saveExcursion(function(resetFunc) {
+        ed.setSelection("[0/0]->[0/10]");
+        setTimeout(resetFunc, 20);
+        setTimeout(function() {
+          expect(ed.getSelectedText()).eq("t\ni\ni");
+          done();
+        }, 30);
       });
     });
   });
