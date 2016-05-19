@@ -2,9 +2,12 @@
 
 describe('ace.ext.keys', function() {
 
-  var ed;
+  var ed, keys = ace.ext.keys, platform, commandKey;
   beforeEach(function() {
+    keys.removeAllKeyCustomizationLayers();
     ed = createEditor("this is a\ntest\n\ntext\n");
+    platform = ed.commands.platform;
+    commandKey = platform === 'mac' ? 'Command' : 'Control';
   });
 
   afterEach(function() {
@@ -12,6 +15,7 @@ describe('ace.ext.keys', function() {
       ed.destroy();
       ed.container.parentNode.removeChild(ed.container);
     }
+    keys.removeAllKeyCustomizationLayers();
   });
 
   describe("find command for key", function() {
@@ -36,12 +40,6 @@ describe('ace.ext.keys', function() {
   });
 
   describe("key input simulation", function() {
-
-    var keys = ace.ext.keys, platform, commandKey;
-    before(function() {
-      platform = ed.commands.platform;
-      commandKey = platform === 'mac' ? 'Command' : 'Control';
-    })
 
     it("simulate simple input", function() {
         ed.setValue('foo\nbar'); ed.selection.clearSelection();
@@ -165,5 +163,40 @@ describe('ace.ext.keys', function() {
       expect(run).equals(1);
     });
 
-  })
+  });
+
+  describe("allEditorCommands", function() {
+
+    it("looks up command in default handler", function() {
+      var all = keys.allEditorCommands(ed);
+      expect(all).deep.property("selectall[0].cmdName").to.equal("selectall")
+      expect(all).deep.property("selectall[0].key").to.equal(commandKey.toLowerCase() + "-a");
+      expect(all).deep.property("selectall[0].cmd").to.equal(ed.getKeyboardHandler().commands.selectall);
+    });
+
+    it("looks up command in custom handler", function() {
+      var cmd = {name: "test-command", bindKey: "Alt-t", exec: function() { }},
+          keyHandler = new (ace.require("ace/keyboard/hash_handler")).HashHandler([cmd]);
+      ed.setKeyboardHandler(keyHandler);
+      var all = keys.allEditorCommands(ed);
+      expect(all).property('test-command').to.have.length(1);
+      expect(all).deep.property("test-command[0].cmdName").to.equal("test-command")
+      expect(all).deep.property("test-command[0].key").to.equal("alt-t")
+      expect(all).deep.property("test-command[0].cmd").to.equal(cmd)
+    });
+
+    it("merges commands of handlers and customization layers", function() {
+      var cmd = {name: "test-command", bindKey: "Alt-t", exec: function() { }},
+          keyHandler = new (ace.require("ace/keyboard/hash_handler")).HashHandler([cmd]);
+      ed.setKeyboardHandler(keyHandler);
+      ace.ext.keys.addKeyCustomizationLayer("test-layer", {commandKeyBinding: {"alt-x": "test-command"}});
+      var all = keys.allEditorCommands(ed);
+      expect(all).property('test-command').to.have.length(2);
+      expect(all).deep.property("test-command[0].cmdName").to.equal("test-command")
+      expect(all).deep.property("test-command[0].key").to.equal("alt-t")
+      expect(all).deep.property("test-command[0].cmd").to.equal(cmd)
+      expect(all).deep.property("test-command[1].key").to.equal("alt-x")
+      expect(all).deep.property("test-command[1].cmd").to.equal("test-command")
+    });
+  });
 });
