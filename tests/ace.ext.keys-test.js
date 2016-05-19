@@ -1,4 +1,4 @@
-/*global process, expect, beforeEach, afterEach, describe, it*/
+/*global ace, createEditor, expect, before, beforeEach, afterEach, describe, it*/
 
 describe('ace.ext.keys', function() {
 
@@ -16,23 +16,21 @@ describe('ace.ext.keys', function() {
 
   describe("find command for key", function() {
 
-    it("finds commands bound in key handler", function(done) {
+    it("finds commands bound in key handler", function() {
       var run = false;
       var cmd = {name: "test-command", bindKey: "Alt-t", exec: function() { run = true; }};
       var keyHandler = new (ace.require("ace/keyboard/hash_handler")).HashHandler([cmd]);
       ed.setKeyboardHandler(keyHandler);
-      ace.ext.keys.lookupKeys(ed, "Alt-t", function(result) {
-        expect(cmd).to.equal(result);
-        expect(run).to.equal(false);
-        done();
-      })
+      var result = ace.ext.keys.lookupKeys(ed, "Alt-t");
+      expect(cmd).to.equal(result);
+      expect(run).to.equal(false);
     });
 
     it("finds commands bound in commands", function() {
       var cmd = {name: "test-command", bindKey: "Alt-t", exec: function() {}};
       ed.commands.addCommands([cmd])
-      ace.ext.keys.lookupKeys(ed, "Alt-t", function(result) {
-        expect(cmd).to.equal(result); });
+      var result = ace.ext.keys.lookupKeys(ed, "Alt-t");
+      expect(cmd).to.equal(result);
     });
 
   });
@@ -86,7 +84,7 @@ describe('ace.ext.keys', function() {
     });
 
   });
-  
+
   describe("key customization", function() {
 
     it("can define new keybindings for exisiting commands", function() {
@@ -95,8 +93,7 @@ describe('ace.ext.keys', function() {
       ed.commands.addCommands([cmd]);
       ace.ext.keys.addKeyCustomizationLayer("test-layer",
         {commandKeyBinding: {"alt-t": "test-command"}})
-      var found;
-      ace.ext.keys.lookupKeys(ed, "Alt-t", function(x) { found = x; })
+      var found = ace.ext.keys.lookupKeys(ed, "Alt-t")
       expect(cmd).to.equal(found);
       expect(ed.keyBinding.$handlers.length).to.equal(1);
     });
@@ -114,13 +111,10 @@ describe('ace.ext.keys', function() {
     it("can remove customizations", function() {
       var cmd = {name: "test-command", exec: function() {}};
       ed.commands.addCommands([cmd]);
-      ace.ext.keys.addKeyCustomizationLayer("test-layer",
-        {commandKeyBinding: {"alt-t": "test-command"}})
+      ace.ext.keys.addKeyCustomizationLayer("test-layer", {commandKeyBinding: {"alt-t": "test-command"}});
       ace.ext.keys.removeKeyCustomizationLayer("test-layer")
-      var found;
-      var reset = ace.ext.keys.lookupKeys(ed, "Alt-t", function(x) { found = x; })
+      var found = ace.ext.keys.lookupKeys(ed, "Alt-t")
       expect(undefined).to.equal(found);
-      reset();
     });
 
     it("can define multiple customizations with priority ", function() {
