@@ -3,15 +3,21 @@
 This package extends the [ace editor](http://ace.c9.io/) with useful functionality such as:
 
 - helpers to lookup, install and remove key bindings
-- 
+- code markers
 - extended editor selection interface
-
-## Usage
-
-
-<!---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--->
+- ast based editor commands
 
 ## Setup
+
+In your webpage load ace and then include whatever parts of ace.improved you need:
+
+```html
+<script type="text/javascript" src="http://cdn.jsdelivr.net/ace/1.2.3/noconflict/ace.js"></script> 
+<script src="ace.improved/lib/ace.improvements.js"></script>
+<script src="ace.improved/lib/ace.ext.keys.js"></script>
+<script src="ace.improved/lib/ace.ext.lang.codemarker.js"></script>
+<!--...-->
+```
 
 ## Interface
 

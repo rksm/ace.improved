@@ -1,6 +1,6 @@
 {
   "name": "ace.improved",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "For a better ace editor",
   "main": "index.js",
   "repository": {
