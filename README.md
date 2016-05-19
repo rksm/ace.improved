@@ -2,7 +2,14 @@
 
 This package extends the [ace editor](http://ace.c9.io/) with useful functionality such as:
 
-# Usage
+- helpers to lookup, install and remove key bindings
+- 
+- extended editor selection interface
+
+## Usage
+
+
+<!---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--->
 
 ## Setup
 
@@ -187,8 +194,87 @@ looking up key bindings, easily adding and removing new key bindings.
   ace.ext.keys.removeKeyCustomizationLayer("test-layer-2");
   ```
 
+<!---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--->
+
+### code markers
+
+Easily highlight areas inside the editor.
+
+Example, add a yellow marker to 'this' and 'test'
+
+<!--document.getElementById("codemarker-css") && document.getElementById("codemarker-css").parentNode.removeChild(document.getElementById("codemarker-css"))-->
+```js
+
+// Ensure CSS
+document.head.insertAdjacentHTML(
+  "beforeend",
+  `<style id="codemarker-css">
+    .example-codemarker {
+    	position: absolute;
+    	border-radius: 3px;
+    	background: rgba(204,204,0,0.7);
+    }
+  </style>`)
+
+// set the text
+ed.session.setValue("this\n is\na\n test")
+
+// create a marker and highlight 'this' and 'test'
+var marker = ace.ext.lang.codemarker.ensureIn(ed.session, "example-codemarker")
+marker.set([{
+  cssClassName: "example-codemarker",
+  startPos: {row: 0, column: 0}, endPos: {row: 0, column: 4}
+}, {
+  cssClassName: "example-codemarker",
+  startPos: {row: 3, column: 1}, endPos: {row: 3, column: 5}
+}]);
+```
+
+
+<!---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--->
+
+### ast commands
+
+<!--
+Adds the editor commands
+
+- forwardSexp
+- backwardSexp
+- backwardUpSexp
+- forwardDownSexp
+- markDefun
+- expandRegion
+- contractRegion
+- gotoNextError
+- gotoPrevErrorOrWarning
+
+`ace.ext.lang.astCommands`
+-->
+
+_TODO_ add doc
+
+
+<!---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--->
+
+### attributed text mode
+
+```js
+ed.session.setMode("ace/mode/text");
+ed.session.getMode().set(ed, [
+  ["Hello", {commands: [{name: 'oink', bindKey: 'enter'}]}]
+]);
+```
+
+_TODO_ add doc
+
+
+<!---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--->
 
 # Development
+
+Run the tests by visiting [tests/run-tests.html](tests/run-tests.html).
+
+<!---=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--->
 
 # License
 
